@@ -1,0 +1,12 @@
+{
+  "name": "camera-server",
+  "version": "1.0.0",
+  "author": "Michael Nutt <michael@nutt.im>",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "gphoto2": "^0.3.0",
+    "koa": "^2.6.2",
+    "koa-logger": "^3.2.0"
+  }
+}
