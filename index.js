@@ -1,5 +1,6 @@
 const Koa = require('koa');
 const logger = require('koa-logger');
+const cors = require('@koa/cors');
 const Camera = require('./camera');
 
 const port = process.env.PORT || 3059;
@@ -13,6 +14,7 @@ const port = process.env.PORT || 3059;
 
   const app = new Koa();
   app.use(logger());
+  app.use(cors());
 
   app.use(async ctx => {
     ctx.assert(ctx.path === '/take', 404, 'Unknown path');
