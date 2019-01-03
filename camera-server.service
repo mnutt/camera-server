@@ -1,0 +1,18 @@
+[Unit]
+Description=camera-server
+Documentation=https://github.com/mnutt/camera-server
+After=network.target
+
+[Service]
+Environment=PORT=3059
+Environment=SSL_KEY=./server.key
+Environment=SSL_CERT=./server.cert
+Environment=HTTPS=true
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/src/camera-server
+ExecStart=/usr/bin/node index.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
