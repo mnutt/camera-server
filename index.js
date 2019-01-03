@@ -1,4 +1,5 @@
 const Koa = require('koa');
+const Router = require('koa-router');
 const logger = require('koa-logger');
 const cors = require('@koa/cors');
 const Camera = require('./camera');
@@ -16,20 +17,22 @@ const port = process.env.PORT || 3059;
   await camera.configure('capturetarget', 1);
 
   const app = new Koa();
-  app.use(logger());
-  app.use(cors());
+  const router = new Router();
 
-  app.use(async ctx => {
-    if (ctx.path === '/cert.der') {
-      ctx.body = fs.readFileSync('server.cert');
-      ctx.type = 'application/x-x509-ca-cert';
-      return;
-    }
-    ctx.assert(ctx.path === '/take', 404, 'Unknown path');
+  router.get('/cert.der', ctx => {
+    ctx.body = fs.readFileSync(process.env.SSL_CERT);
+    ctx.type = 'application/x-x509-ca-cert';
+  });
 
+  router.get('/take', async ctx => {
     ctx.body = await camera.takePicture();
     ctx.type = 'image/jpeg';
   });
+
+  app.use(logger());
+  app.use(cors());
+  app.use(router.routes());
+  app.use(router.allowedMethods());
 
   let server;
   if(process.env.HTTPS) {
